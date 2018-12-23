@@ -11,9 +11,9 @@
 
 
 
-NewPing sonar(USTrigger, USEcho, MaxDistance);//Δημιουργούμε 2 αντικείμενα,ενα για τον σερβοκινητήρα και ενα για τον αισθητήρα.
+NewPing sonar(USTrigger, USEcho, MaxDistance);
 
-//Παρακάτω δημιουργώ unsigned ακέραιες μεταβλητές που θα χρησιμοποιήθουν αργότερα στον κωδικα.
+
 unsigned int duration;
 unsigned int distance;
 unsigned int FrontDistance;
@@ -24,53 +24,52 @@ Servo myservo;
 void setup()                                            
 {
   Serial.begin(9600);                             
-  myservo.attach(12);  // attaches the servo on pin 9 to the servo object 
-//Εδώ ορίζουμε τα pinModes.Αφού θα  θα στέλνουμε σήματα απο τα pins τα ορίζουμε ως outputs.
+  myservo.attach(12); 
+
   pinMode(LeftMotorForward, OUTPUT);
   pinMode(LeftMotorBackward, OUTPUT);
   pinMode(RightMotorForward, OUTPUT);
   pinMode(RightMotorBackward, OUTPUT);
-      // variable to store the servo position
+    
 }
 void loop() {
-  for(int pos = 0; pos<160; pos+=32)     //to 180 degrees 
-  {                                  // in steps of 1 degree 
-    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-          // waits 15ms for the servo to reach the position 
+  for(int pos = 0; pos<160; pos+=32)     
+  {                                  
+    myservo.write(pos);              
+        
      scan();
-     FrontDistance = distance;                           //Ορισε την μεταβλητή FrontDistance όσο ειναι η τιμή της μεταβλητής distance που επέστρεψε από την συνάρτηση scan
-  delay(30);
-  if(FrontDistance > 50 || FrontDistance == 0)        //Aν δεν υπάρχει τιποτα μπροστα από το ρομπότ σε απόστασ 60cm ή αν η τιμή της distance ειναι μηδέν που σημαίνει οτι δεν γύρισε παλμός τοτε 
+     FrontDistance = distance;                           
+  if(FrontDistance > 50 || FrontDistance == 0)        
   {
-   moveForward();                                     //Πήγαινε στην moveForward συνάσρτηση
+   moveForward();                                     
   } 
-  else                                                //Αλλιώς αν  υπάρχει κατι μπροστα απο το ρομπότ σε απόσταση 60cm ή λιγότερα..
+  else                                                
   {
     
-    moveStop();                                       //Πήγαινε στην moveStop συνάρτηση και μετά στην navigate συνάρτηση
+    moveStop();                                       
     navigate();
   }
   } 
 for(int pos=160; pos>=0; pos-=32)
   {                                
-    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-                         // waits 15ms for the servo to reach the position 
+    myservo.write(pos);              
+                         
      scan();
-     FrontDistance = distance;     //Ορισε την μεταβλητή FrontDistance όσο ειναι η τιμή της μεταβλητής distance που επέστρεψε από την συνάρτηση scan
+     FrontDistance = distance;     
      delay(30);
-  if(FrontDistance > 50 || FrontDistance == 0)        //Aν δεν υπάρχει τιποτα μπροστα από το ρομπότ σε απόστασ 60cm ή αν η τιμή της distance ειναι μηδέν που σημαίνει οτι δεν γύρισε παλμός τοτε 
+  if(FrontDistance > 50 || FrontDistance == 0)        
   {
-   moveForward();                                     //Πήγαινε στην moveForward συνάσρτηση
+   moveForward();                                   
   } 
-  else                                                //Αλλιώς αν  υπάρχει κατι μπροστα απο το ρομπότ σε απόσταση 60cm ή λιγότερα..
+  else                                                
   {
     
-    moveStop();                                       //Πήγαινε στην moveStop συνάρτηση και μετά στην navigate συνάρτηση
+    moveStop();                                       
     navigate();
   }
   } 
 } 
-void moveForward()                                    //Η συνάρτηση αυτή λεει στο ρομπότ να κουνήθει μπροστά
+void moveForward()                                 
 {
   Serial.println("");
   Serial.println("Moving forward");
@@ -80,7 +79,7 @@ void moveForward()                                    //Η συνάρτηση α
   digitalWrite(RightMotorForward, HIGH);
 }
 
-void moveBackward()                                  //Η συνάρτηση αυτή λεει στο ρομπότ να κουνήθει πίσω
+void moveBackward()                             
 {
   Serial.println("");
   Serial.println("Moving backward");
@@ -90,7 +89,7 @@ void moveBackward()                                  //Η συνάρτηση α�
   digitalWrite(RightMotorBackward, HIGH);
 }
 
-void moveLeft()                                      //Η συνάρτηση αυτή λεει στο ρομπότ να κουνήθει αριστερά
+void moveLeft()                                  
 {
   Serial.println("");
   Serial.println("Moving left");
@@ -101,8 +100,8 @@ void moveLeft()                                      //Η συνάρτηση α�
   
 }
 
-void moveRight()                                    //Η συνάρτηση αυτή λεει στο ρομπότ να κουνήθει δεξιά
-{
+void moveRight()  
+{                                
   Serial.println("");
   Serial.println("Moving right");
   digitalWrite(LeftMotorBackward, LOW);
@@ -111,7 +110,7 @@ void moveRight()                                    //Η συνάρτηση αυ
   digitalWrite(RightMotorBackward, HIGH);
 }
 
-void moveStop()                                     //Η συνάρτηση αυτή λεει στο ρομπότ να σταματήσει
+void moveStop()                                     
 {
   Serial.println("");
   Serial.println("Stopping");
@@ -120,7 +119,7 @@ void moveStop()                                     //Η συνάρτηση αυ
   digitalWrite(RightMotorForward, LOW);
   digitalWrite(RightMotorBackward, LOW);
 }
-void scan()                                         //Η συνάρτηση αυτή καθορίζει την απόσταση που βρίσκονται τα ανικείμενα απο τον αισθητήρα υπερήχων
+void scan()                                         
 {
   Serial.println("");
   Serial.println("Scanning");
@@ -128,36 +127,36 @@ void scan()                                         //Η συνάρτηση αυ
   distance = Time / US_ROUNDTRIP_CM;
   delay(300);
 }
-void navigate()                                     //Η συνάρτηση αυτή πλοηγεί το ρομπότ στον χώρο
+void navigate()                                   
 {
     Serial.println("There's an obstacle!");  
-    moveStop();                                       // Πήγαινε στην movestοp συνάρτηση
+    moveStop();                                      
     delay(30);
-    scan();                                           //Πήγαινε στην scan συνάρτηση
+    scan();                                           
     delay(30);
-    LeftDistance = distance;                          //Θέτει την μεταβλήτη LeftDistance όσο ειναι η τιμή της μεταβλητής distance
+    LeftDistance = distance;                         
     Serial.println("Left distance = ");
     Serial.print(distance);                                   
-    moveStop();                                        // Πήγαινε στην movestοp συνάρτηση
+    moveStop();                                        
     delay(30);
-    scan();                                           // Πήγαινε στην scan συνάρτηση
+    scan();                                          
     delay(30);
-    RightDistance = distance;                         //Θέτει την μεταβλήτη RightDistance όσο ειναι η τιμή της μεταβλητής distance
+    RightDistance = distance;                         
     Serial.println("Right distance = ");
     Serial.print(distance);
-    if(abs(RightDistance - LeftDistance) < 5)        //Aν η απόλυτη τιμή της διαφορας Rightdistance-Leftdistance ειναι μικρότερη απο 5 τοτε
+    if(abs(RightDistance - LeftDistance) < 5)        
     {
-      moveBackward();                                  //Πήγαινε στην movebackward συνάρτηση
+      moveBackward();                                  
       delay(300);                                      
     }
-    else if(RightDistance < LeftDistance)                  //Aν η απόσταση από τα αριστέρα ειναι μεγαλύτερη απο την απόσταση απο τα δεξιά τότε
+    else if(RightDistance < LeftDistance)                 
     {
-     moveLeft();                                      //Πήγαινε στην moveleft συνάρτηση
+     moveLeft();                                      
      delay(300);                                      
     }
-    else if(LeftDistance < RightDistance)             //Αλλιώς Aν η απόσταση από τα δεξιά ειναι μεγαλύτερη απο την απόσταση απο τα αριστερά τότε
+    else if(LeftDistance < RightDistance)             
     {
-     moveRight();                                     //Πήγαινε στην moveright συνάρτηση
+     moveRight();                                    
      delay(300);                                      
     }
 }
